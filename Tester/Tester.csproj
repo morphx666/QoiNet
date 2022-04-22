@@ -6,8 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <BaseOutputPath>..\Release\</BaseOutputPath>
-    <AssemblyVersion>2022.4.22.83</AssemblyVersion>
-    <FileVersion>2022.4.22.83</FileVersion>
+    <AssemblyVersion>2022.4.22.100</AssemblyVersion>
+    <FileVersion>2022.4.22.100</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

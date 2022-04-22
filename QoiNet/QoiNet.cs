@@ -19,7 +19,7 @@ namespace QoiNet {
         private const uint QOI_PIXELS_MAX = 400000000u;
         private const int QOI_HEADER_SIZE = 14;
         private static readonly byte[] qoiPadding = { 0, 0, 0, 0, 0, 0, 0, 1 };
-        private static readonly int qoiPaddingSize = sizeof(byte) * qoiPadding.Length;
+        private static readonly int qoiPaddingSize = sizeof(byte);// * qoiPadding.Length;
 
         public record Description {
             public uint Width;
@@ -77,13 +77,12 @@ namespace QoiNet {
 
             int pxLen = (int)(description.Width * description.Height * description.Channels);
             int pxEnd = pxLen - description.Channels;
-            int channels = description.Channels;
 
-            for(int pxPos = 0; pxPos < pxLen; pxPos += channels) {
+            for(int pxPos = 0; pxPos < pxLen; pxPos += description.Channels) {
                 px.Rgba.R = pixels[pxPos + 2];
                 px.Rgba.G = pixels[pxPos + 1];
                 px.Rgba.B = pixels[pxPos + 0];
-                if(channels == 4) px.Rgba.A = pixels[pxPos + 3];
+                if(description.Channels == 4) px.Rgba.A = pixels[pxPos + 3];
 
                 if(px.V == pxPrev.V) {
                     run++;
@@ -222,7 +221,7 @@ namespace QoiNet {
         public static Bitmap? FromQoiFile(string fileName) {
             byte[] data = File.ReadAllBytes(fileName);
             var r = Decode(data);
-            if(r == null) return null;
+            if(r == null) return null; // Throw Exception
 
             var b = r.Value.Bytes;
             var d = r.Value.Description;
@@ -234,6 +233,8 @@ namespace QoiNet {
 
         public static void ToQoiFile(Bitmap bitmap, string fileName) {
             var r = Encode(bitmap);
+            if(r == null) return; // Throw Exception
+
             File.WriteAllBytes(fileName, r.Value.Bytes);
         }
 
