@@ -1,5 +1,7 @@
 ﻿using DirectBitmapLib;
+using System;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
 
 // https://github.com/phoboslab/qoi
@@ -36,8 +38,10 @@ namespace QoiNet {
                 public byte B;
                 public byte A;
             }
+
             [FieldOffset(0)]
             public SRgba Rgba;
+
             [FieldOffset(0)]
             public uint V;
         }
@@ -45,7 +49,6 @@ namespace QoiNet {
         public static (byte[] Bytes, Description Description)? Encode(Bitmap bitmap) {
             DirectBitmap dbmp = new(bitmap);
             byte[] pixels = dbmp.Bits;
-            QoiRgba[] index = new QoiRgba[64];
 
             Description description = new();
             description.Width = (uint)dbmp.Width;
@@ -71,6 +74,7 @@ namespace QoiNet {
             bytes[p++] = description.ColorSpace;
 
             int run = 0;
+            QoiRgba[] index = new QoiRgba[64];
             QoiRgba pxPrev = new();
             pxPrev.Rgba.A = 255;
             QoiRgba px = pxPrev;
@@ -96,7 +100,7 @@ namespace QoiNet {
                         run = 0;
                     }
 
-                    int indexPos = ColorHash(px.Rgba) % 64;
+                    int indexPos = ColorHash(px.Rgba);
 
                     if(index[indexPos].V == px.V) {
                         bytes[p++] = (byte)(QOI_OP_INDEX | indexPos);
@@ -206,7 +210,7 @@ namespace QoiNet {
                         run = (b1 & 0x3f);
                     }
 
-                    index[ColorHash(px.Rgba) % 64] = px;
+                    index[ColorHash(px.Rgba)] = px;
                 }
 
                 pixels[pxPos + 2] = px.Rgba.R;
@@ -239,7 +243,7 @@ namespace QoiNet {
         }
 
         private static byte ColorHash(QoiRgba.SRgba c) {
-            return (byte)(c.R * 3 + c.G * 5 + c.B * 7 + c.A * 11);
+            return (byte)((c.R * 3 + c.G * 5 + c.B * 7 + c.A * 11) % 64);
         }
 
         private static int Read32(byte[] bytes, ref int p) {

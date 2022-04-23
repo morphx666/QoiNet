@@ -1,16 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
     <BaseOutputPath>..\Release</BaseOutputPath>
-    <AssemblyVersion>2022.4.22.87</AssemblyVersion>
-    <FileVersion>2022.4.22.87</FileVersion>
+    <AssemblyVersion>2022.4.23.106</AssemblyVersion>
+    <FileVersion>2022.4.23.106</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.3" />
   </ItemGroup>
 
 </Project>

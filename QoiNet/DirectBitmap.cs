@@ -1,11 +1,12 @@
 ﻿using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using System;
+using System.Threading.Tasks;
 #if WINFORMS
 using System.Windows.Forms;
 #endif
 
-#pragma warning disable CA1416 // Validate platform compatibility
 namespace DirectBitmapLib {
     public class DirectBitmap : IDisposable {
         public readonly Bitmap Bitmap;
