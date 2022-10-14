@@ -5,8 +5,8 @@
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
     <BaseOutputPath>..\Release\</BaseOutputPath>
-    <AssemblyVersion>2022.10.14.175</AssemblyVersion>
-    <FileVersion>2022.10.14.175</FileVersion>
+    <AssemblyVersion>2022.10.14.230</AssemblyVersion>
+    <FileVersion>2022.10.14.230</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

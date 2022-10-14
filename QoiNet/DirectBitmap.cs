@@ -54,7 +54,7 @@ namespace DirectBitmapLib {
                     srcOffset = x * BytesPerPixel + y * sourceStride;
 
                     a = (BytesPerPixel == 4 ? Marshal.ReadByte(sourcePointer, srcOffset + 3) : 255);
-                    pa = a / 255;
+                    pa = a / 255.0;
                     SetPixel(x, y, Color.FromArgb(a,
                                                  (int)(Marshal.ReadByte(sourcePointer, srcOffset + 2) * pa),
                                                  (int)(Marshal.ReadByte(sourcePointer, srcOffset + 1) * pa),

@@ -1,5 +1,6 @@
 ﻿using DirectBitmapLib;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -21,7 +22,7 @@ namespace QoiNet {
         private const uint QOI_PIXELS_MAX = 400000000u;
         private const int QOI_HEADER_SIZE = 14;
         private static readonly byte[] qoiPadding = { 0, 0, 0, 0, 0, 0, 0, 1 };
-        private static readonly int qoiPaddingSize = sizeof(byte) * qoiPadding.Length;
+        private static readonly int qoiPaddingSize = qoiPadding.Length;
 
         public record Description {
             public uint Width;
@@ -50,10 +51,11 @@ namespace QoiNet {
             DirectBitmap dbmp = new(bitmap);
             byte[] pixels = dbmp.Bits;
 
-            Description description = new();
-            description.Width = (uint)dbmp.Width;
-            description.Height = (uint)dbmp.Height;
-            description.Channels = (byte)dbmp.BytesPerPixel;
+            Description description = new() {
+                Width = (uint)dbmp.Width,
+                Height = (uint)dbmp.Height,
+                Channels = (byte)dbmp.BytesPerPixel
+            };
 
             if(description.Width == 0 || description.Height == 0 ||
                description.Channels < 3 || description.Channels > 4 ||
@@ -243,7 +245,7 @@ namespace QoiNet {
         }
 
         private static int ColorHash(QoiRgba.SRgba c) {
-            return (c.R * 3 + c.G * 5 + c.B * 7 + c.A * 11) % 64;
+            return ((int)c.R * 3 + c.G * 5 + c.B * 7 + c.A * 11) % 64;
         }
 
         private static int Read32(byte[] bytes, ref int p) {

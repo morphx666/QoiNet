@@ -2,7 +2,7 @@
   "profiles": {
     "Tester": {
       "commandName": "Project",
-      "commandLineArgs": "\"C:\\Users\\XavierFlix\\Dropbox\\Projects\\QoiNet\\Release\\qoi_test_images_decode\\kodim10.qoi\""
+      "commandLineArgs": "\"C:\\Users\\XavierFlix\\Dropbox\\Projects\\QoiNet\\Release\\Debug\\net5.0\\dice.png\""
     }
   }
 }
