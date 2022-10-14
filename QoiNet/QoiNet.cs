@@ -9,19 +9,19 @@ using System.Runtime.InteropServices;
 namespace QoiNet {
     public static class QoiNet {
         private const byte QOI_OP_INDEX = 0x00; /* 00xxxxxx */
-        private const byte QOI_OP_DIFF = 0x40; /* 01xxxxxx */
-        private const byte QOI_OP_LUMA = 0x80; /* 10xxxxxx */
-        private const byte QOI_OP_RUN = 0xc0; /* 11xxxxxx */
-        private const byte QOI_OP_RGB = 0xfe; /* 11111110 */
-        private const byte QOI_OP_RGBA = 0xff; /* 11111111 */
+        private const byte QOI_OP_DIFF  = 0x40; /* 01xxxxxx */
+        private const byte QOI_OP_LUMA  = 0x80; /* 10xxxxxx */
+        private const byte QOI_OP_RUN   = 0xc0; /* 11xxxxxx */
+        private const byte QOI_OP_RGB   = 0xfe; /* 11111110 */
+        private const byte QOI_OP_RGBA  = 0xff; /* 11111111 */
 
-        private const byte QOI_MASK_2 = 0xc0; /* 11000000 */
+        private const byte QOI_MASK_2   = 0xc0; /* 11000000 */
 
         private const int QOI_MAGIC = ('q' << 24) | ('o' << 16) | ('i' << 8) | 'f';
         private const uint QOI_PIXELS_MAX = 400000000u;
         private const int QOI_HEADER_SIZE = 14;
         private static readonly byte[] qoiPadding = { 0, 0, 0, 0, 0, 0, 0, 1 };
-        private static readonly int qoiPaddingSize = sizeof(byte);// * qoiPadding.Length;
+        private static readonly int qoiPaddingSize = sizeof(byte) * qoiPadding.Length;
 
         public record Description {
             public uint Width;
@@ -156,7 +156,7 @@ namespace QoiNet {
 
             int p = 0;
             Description description = new();
-            int header_magic = Read32(bytes, ref p);
+            int headerMagic = Read32(bytes, ref p);
             description.Width = (uint)Read32(bytes, ref p);
             description.Height = (uint)Read32(bytes, ref p);
             description.Channels = bytes[p++];
@@ -165,7 +165,7 @@ namespace QoiNet {
             if(description.Width == 0 || description.Height == 0 ||
                description.Channels < 3 || description.Channels > 4 ||
                description.ColorSpace > 1 ||
-               header_magic != QOI_MAGIC ||
+               headerMagic != QOI_MAGIC ||
                description.Height >= QOI_PIXELS_MAX / description.Width) {
                 return null;
             }
@@ -242,8 +242,8 @@ namespace QoiNet {
             File.WriteAllBytes(fileName, r.Value.Bytes);
         }
 
-        private static byte ColorHash(QoiRgba.SRgba c) {
-            return (byte)((c.R * 3 + c.G * 5 + c.B * 7 + c.A * 11) % 64);
+        private static int ColorHash(QoiRgba.SRgba c) {
+            return (c.R * 3 + c.G * 5 + c.B * 7 + c.A * 11) % 64;
         }
 
         private static int Read32(byte[] bytes, ref int p) {

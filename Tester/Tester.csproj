@@ -5,12 +5,27 @@
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
     <BaseOutputPath>..\Release\</BaseOutputPath>
-    <AssemblyVersion>2022.4.23.118</AssemblyVersion>
-    <FileVersion>2022.4.23.118</FileVersion>
+    <AssemblyVersion>2022.10.14.175</AssemblyVersion>
+    <FileVersion>2022.10.14.175</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\QoiNet\QoiNet.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

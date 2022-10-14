@@ -39,7 +39,7 @@ namespace DirectBitmapLib {
                 bitsHandle.AddrOfPinnedObject());
         }
 
-        public DirectBitmap(Bitmap bmp) : this(bmp.Width, bmp.Height) {
+        public DirectBitmap(Bitmap bmp, int channels = 4) : this(bmp.Width, bmp.Height, channels) {
             BitmapData sourceData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, bmp.PixelFormat);
             IntPtr sourcePointer = sourceData.Scan0;
             int sourceStride = sourceData.Stride;

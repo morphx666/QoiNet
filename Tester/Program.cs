@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Net.Security;
 
 namespace Tester {
     internal class Program {
@@ -14,6 +16,8 @@ namespace Tester {
                     Bitmap? bmp = QoiNet.QoiNet.FromQoiFile(fi.FullName);
                     bmp?.Save(target, ImageFormat.Png);
                     Console.WriteLine($"Generated: {target}\n");
+
+                    Process.Start(@"C:\Windows\system32\mspaint.exe", target);
                 } else {
                     string target = fi.Name.Replace(fi.Extension, ".qoi");
                     Bitmap bmp = (Bitmap)Bitmap.FromFile(fi.FullName);
