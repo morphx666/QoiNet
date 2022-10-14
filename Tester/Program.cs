@@ -3,44 +3,61 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Net.Security;
+using System.Linq;
+using System.Reflection;
 
 namespace Tester {
     internal class Program {
         public static void Main(string[] args) {
+            Console.WriteLine("QoiNet " + Assembly.GetEntryAssembly()?.GetName().Version + "\n");
+
             if(args.Length == 0) {
+                Console.WriteLine("\tPNG->QOI:  Tester file.png");
+                Console.WriteLine("\tQOI->PNG:  Tester file.qoi");
+                Console.WriteLine("\tBenchmark: Tester path");
+                Console.WriteLine("\t           Where path points to a folder containing PNGs and or QOIs\n");
             } else {
                 FileInfo fi = new(args[0]);
-                if(fi.Extension == ".qoi") {
-                    string target = fi.Name.Replace(fi.Extension, ".png");
-                    Bitmap? bmp = QoiNet.QoiNet.FromQoiFile(fi.FullName);
-                    bmp?.Save(target, ImageFormat.Png);
-                    Console.WriteLine($"Generated: {target}\n");
-
-                    Process.Start(@"C:\Windows\system32\mspaint.exe", target);
+                if(fi.Extension == "") {
+                    RunBenchmark(args[0]);
                 } else {
-                    string target = fi.Name.Replace(fi.Extension, ".qoi");
-                    Bitmap bmp = (Bitmap)Bitmap.FromFile(fi.FullName);
-                    QoiNet.QoiNet.ToQoiFile(bmp, target);
-                    Console.WriteLine($"Generated: {target}\n");
+                    if(fi.Extension == ".qoi") {
+                        Console.WriteLine($"Generated: {ToPng(fi)}\n");
+                    } else {
+                        Console.WriteLine($"Generated: {ToQoi(fi)}\n");
+                    }
                 }
             }
+        }
 
-            //string src = @"C:\Users\Xavier Flix\Dropbox\Projects\QoiNet\Release\qoi_test_images\";
-            //string trg = @"C:\Users\Xavier Flix\Dropbox\Projects\QoiNet\Release\qoi_test_images_decode\";
+        private static void RunBenchmark(string path) {
+            DirectoryInfo di = new(path);
+            FileInfo[] files = di.GetFiles();
+            int maxLen = files.Max(f => f.Name.Length) + 4;
+            Stopwatch sw = new();
+            for(int i = 0; i < files.Length; i++) {
+                string pad = new(' ', maxLen-files[i].Name.Length);
+                sw.Restart();
+                if(files[i].Extension == ".qoi") {
+                    Console.WriteLine($"Generated: {ToPng(files[i])}{pad} | {files[i].Length / 1024.0,9:N2} KiB | {sw.ElapsedMilliseconds,8:N0} ms");
+                } else {
+                    Console.WriteLine($"Generated: {ToQoi(files[i])}{pad} | {files[i].Length / 1024.0,9:N2} KiB | {sw.ElapsedMilliseconds,8:N0} ms");
+                }
+            }
+        }
 
-            //// Qoi -> Png
-            //foreach(FileInfo file in new DirectoryInfo(src).GetFiles("*.qoi")) {
-            //    Bitmap? bmp = QoiNet.QoiNet.FromQoiFile(file.FullName);
-            //    bmp?.Save(trg + file.Name.Replace(file.Extension, "") + ".png", ImageFormat.Png);
-            //}
+        private static string ToQoi(FileInfo file) {
+            string target = file.Name.Replace(file.Extension, ".qoi");
+            Bitmap bmp = (Bitmap)Bitmap.FromFile(file.FullName);
+            QoiNet.QoiNet.ToQoiFile(bmp, target);
+            return target; 
+        }
 
-            //// Png -> Qoi
-            //foreach(FileInfo file in new DirectoryInfo(src).GetFiles("*.png")) {
-            //    string trgFile = trg + file.Name.Replace(file.Extension, "") + ".qoi";
-            //    Bitmap bmp = (Bitmap)Bitmap.FromFile(file.FullName);
-            //    QoiNet.QoiNet.ToQoiFile(bmp, trgFile);
-            //}
+        private static string ToPng(FileInfo file) {
+            string target = file.Name.Replace(file.Extension, ".png");
+            Bitmap? bmp = QoiNet.QoiNet.FromQoiFile(file.FullName);
+            bmp?.Save(target, ImageFormat.Png);
+            return target;
         }
     }
 }

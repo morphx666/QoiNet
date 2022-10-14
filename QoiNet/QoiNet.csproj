@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <BaseOutputPath>..\Release</BaseOutputPath>
-    <AssemblyVersion>2022.10.14.219</AssemblyVersion>
-    <FileVersion>2022.10.14.219</FileVersion>
+    <BaseOutputPath></BaseOutputPath>
+    <AssemblyVersion>2022.10.14.228</AssemblyVersion>
+    <FileVersion>2022.10.14.228</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
