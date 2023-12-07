@@ -14,7 +14,7 @@ namespace Tester {
             if(args.Length == 0) {
                 Console.WriteLine("\tPNG->QOI:  Tester file.png");
                 Console.WriteLine("\tQOI->PNG:  Tester file.qoi");
-                Console.WriteLine("\tBenchmark: Tester path");
+                Console.WriteLine("\tBenchmark: Tester <path>");
                 Console.WriteLine("\t           Where path points to a folder containing PNGs and or QOIs\n");
             } else {
                 FileInfo fi = new(args[0]);
@@ -36,21 +36,21 @@ namespace Tester {
             int maxLen = files.Max(f => f.Name.Length) + 4;
             Stopwatch sw = new();
             for(int i = 0; i < files.Length; i++) {
-                string pad = new(' ', maxLen-files[i].Name.Length);
+                string pad = new(' ', maxLen - files[i].Name.Length);
                 sw.Restart();
                 if(files[i].Extension == ".qoi") {
-                    Console.WriteLine($"Generated: {ToPng(files[i])}{pad} | {files[i].Length / 1024.0,9:N2} KiB | {sw.ElapsedMilliseconds,8:N0} ms");
+                    Console.WriteLine($"Generated: {ToPng(files[i])}{pad} | {files[i].Length / 1024.0,9:N2} KiB | {sw.ElapsedMilliseconds,4:N0} ms");
                 } else {
-                    Console.WriteLine($"Generated: {ToQoi(files[i])}{pad} | {files[i].Length / 1024.0,9:N2} KiB | {sw.ElapsedMilliseconds,8:N0} ms");
+                    Console.WriteLine($"Generated: {ToQoi(files[i])}{pad} | {files[i].Length / 1024.0,9:N2} KiB | {sw.ElapsedMilliseconds,4:N0} ms");
                 }
             }
         }
 
         private static string ToQoi(FileInfo file) {
             string target = file.Name.Replace(file.Extension, ".qoi");
-            Bitmap bmp = (Bitmap)Bitmap.FromFile(file.FullName);
+            Bitmap bmp = (Bitmap)Image.FromFile(file.FullName);
             QoiNet.QoiNet.ToQoiFile(bmp, target);
-            return target; 
+            return target;
         }
 
         private static string ToPng(FileInfo file) {

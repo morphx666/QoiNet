@@ -180,6 +180,7 @@ namespace QoiNet {
 
             int run = 0;
             int chunksLen = size - qoiPaddingSize;
+
             for(int pxPos = 0; pxPos < pxLen; pxPos += channels) {
                 if(run > 0) {
                     run--;
@@ -226,7 +227,7 @@ namespace QoiNet {
         public static Bitmap? FromQoiFile(string fileName) {
             byte[] data = File.ReadAllBytes(fileName);
             var r = Decode(data);
-            if(r == null) return null; // Throw Exception
+            if(!r.HasValue) return null; // FXIME: Throw Exception?
 
             var b = r.Value.Bytes;
             var d = r.Value.Description;
@@ -238,21 +239,21 @@ namespace QoiNet {
 
         public static void ToQoiFile(Bitmap bitmap, string fileName) {
             var r = Encode(bitmap);
-            if(r == null) return; // Throw Exception
+            if(!r.HasValue) return; // FXIME: Throw Exception?
 
             File.WriteAllBytes(fileName, r.Value.Bytes);
         }
 
         private static int ColorHash(QoiRgba.SRgba c) {
-            return ((int)c.R * 3 + c.G * 5 + c.B * 7 + c.A * 11) % 64;
+            return (c.R * 3 + c.G * 5 + c.B * 7 + c.A * 11) % 64;
         }
 
         private static int Read32(byte[] bytes, ref int p) {
-            uint a = bytes[p++];
-            uint b = bytes[p++];
-            uint c = bytes[p++];
-            uint d = bytes[p++];
-            return (int)(a << 24 | b << 16 | c << 8 | d);
+            byte a = bytes[p++];
+            byte b = bytes[p++];
+            byte c = bytes[p++];
+            byte d = bytes[p++];
+            return a << 24 | b << 16 | c << 8 | d;
         }
 
         private static void Write32(byte[] bytes, ref int p, int v) {

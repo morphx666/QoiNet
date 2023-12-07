@@ -46,15 +46,12 @@ namespace DirectBitmapLib {
             this.BytesPerPixel = sourceStride / bmp.Width;
             int srcOffset;
 
-            int a;
-            double pa;
-
             for(int y = 0; y < bmp.Height; y++) {
                 for(int x = 0; x < bmp.Width; x++) {
                     srcOffset = x * BytesPerPixel + y * sourceStride;
 
-                    a = (BytesPerPixel == 4 ? Marshal.ReadByte(sourcePointer, srcOffset + 3) : 255);
-                    pa = a / 255.0;
+                    int a = (BytesPerPixel == 4 ? Marshal.ReadByte(sourcePointer, srcOffset + 3) : 255);
+                    double pa = a / 255.0;
                     SetPixel(x, y, Color.FromArgb(a,
                                                  (int)(Marshal.ReadByte(sourcePointer, srcOffset + 2) * pa),
                                                  (int)(Marshal.ReadByte(sourcePointer, srcOffset + 1) * pa),
